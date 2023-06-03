@@ -164,7 +164,6 @@ public class Entities extends Constructs {
         ge.setHp(startingHp);
         layer.getChildren().add(ge);
         loader.getEnemies().add(ge);
-        loader.setTotalEnemies(loader.getTotalEnemies() + 1);
         return ge;
     }
     
@@ -186,7 +185,7 @@ public class Entities extends Constructs {
         ge.setHp(startingHp);
         layer.getChildren().add(ge);
         loader.getEnemies().add(ge);
-        loader.setTotalEnemies(loader.getTotalEnemies() + 1);
+        loader.setTotalEnemies(loader.getTotalEnemies() + 1);        
         return ge;
     }
 
@@ -200,27 +199,6 @@ public class Entities extends Constructs {
         loader.setTotalEnemies(loader.getTotalEnemies() + 1);
         return ge;
     }    
-
-    public Entities puppyShooter(Pane layer) {
-        item = new Item();
-        int startingHp = 15;
-        Entities ge = new Entities(SPRITE_SHEET, PUPPY_ONE, "Bright Puppy",
-                0, startingHp, 5000, 0.2, false, false, false, false, false);
-        if (!ge.getIsDeadProperty().get()) {
-            enemyShot(ge, SHT_DIR, layer, ge.getSpriteW() / 2, ge.getSpriteH(), true, 1500);
-        }
-        ge.setHp(startingHp);
-        layer.getChildren().add(ge);
-        loader.getEnemies().add(ge);
-        loader.setTotalEnemies(loader.getTotalEnemies() + 1);
-        ge.getIsDeadProperty().addListener((Observable obs) -> {
-            double randomize = Math.random();
-            if (randomize < ge.getItemDropChance()) {
-                dropItem(ge, item.hpIncrease(layer));
-            }
-        });
-        return ge;
-    }
 
     public Entities chiuaua(Pane layer) {
         int startingHp = 10;
@@ -275,6 +253,28 @@ public class Entities extends Constructs {
         loader.setTotalEnemies(loader.getTotalEnemies() + 1);
         return ge;
     }
+
+    public Entities puppyShooter(Pane layer) {
+        item = new Item();
+        int startingHp = 15;
+        Entities ge = new Entities(SPRITE_SHEET, PUPPY_ONE, "Bright Puppy",
+                0, startingHp, 5000, 0.2, false, false, false, false, false);
+        ge.setHp(startingHp);
+        if (!ge.getIsDeadProperty().get()) {
+            enemyShot(ge, SHT_DIR, layer, ge.getSpriteW() / 2, ge.getSpriteH(), true, 1500);
+        }
+        layer.getChildren().add(ge);
+        loader.getEnemies().add(ge);
+        loader.setTotalEnemies(loader.getTotalEnemies() + 1);
+        ge.getIsDeadProperty().addListener((Observable obs) -> {
+            double randomize = Math.random();
+            if (randomize < ge.getItemDropChance()) {
+                dropItem(ge, item.hpIncrease(layer));
+            }
+        });        
+        
+        return ge;
+    }
     
     public Entities rocketeer(Pane layer) {
         int startingHp = 50;
@@ -285,6 +285,7 @@ public class Entities extends Constructs {
         layer.getChildren().add(ge);
         loader.getEnemies().add(ge);
         loader.setTotalEnemies(loader.getTotalEnemies() + 1);
+      
         return ge;
     }
     
@@ -302,7 +303,6 @@ public class Entities extends Constructs {
     
 //    public ArrayList<Entities> dachshund(Pane layer, Entities... args) {
 //        int startingHp = 50;
-//
 //
 //        Entities head = new Entities(SPRITE_SHEET, BOSS_ONE, "",
 //                0, 50, 0, 0, false, false, true, false, false);
@@ -700,6 +700,7 @@ public class Entities extends Constructs {
     public Entities addShadow(Entities source) {
         Entities shadow = new Entities(SPRITE_SHEET, source.getSpriteView(), "shadow", 
                 source.getRotationAngle(), source.getIsMarkedForRemoval());
+//        shadow.setIsNeutral(true);
         loader.getEnemies().add(shadow);
         ColorAdjust colorAdjust = new ColorAdjust(-1, -1, -1, -1);
         shadow.setIsNeutral(true);

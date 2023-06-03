@@ -155,6 +155,8 @@ public class Level extends Parent {
                 lastTime = System.currentTimeMillis();
                 if (counter % ONE_SEC == 0) {
                     System.out.println(counter / ONE_SEC);                      //level timer display for testing
+                    System.out.println("No. of enemies: " +loader.getTotalEnemies());
+                    System.out.println("Enemies killed: " +loader.getEnemiesKilled());
                 }
                 loader.update();
                 loader.movePlayer();
@@ -298,6 +300,8 @@ public class Level extends Parent {
                     }     
                 if (counter % ONE_SEC == 0) {
                     System.out.println(counter / ONE_SEC);                      //level timer display for testing
+                    System.out.println("No. of enemies: " +loader.getTotalEnemies());
+                    System.out.println("Enemies killed: " +loader.getEnemiesKilled());
                 }
                 if (!loader.getBossTime()) {
                     if (counter % (ONE_SEC * 10) == 0 && counter < (ONE_SEC * 170)) {

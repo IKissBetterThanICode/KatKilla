@@ -144,7 +144,9 @@ public class LevelLoader extends Parent {
                 level.getHue(), level.getScrollSpeed()),
                 groundObjectLayer, bottomLayer, airObjectLayer, topLayer, guiLayer);
 
+        System.out.println("No. of enemies: " +getTotalEnemies());
         return gameGroup;
+        
     }
     
     private Entities playerShadow() {
@@ -445,7 +447,7 @@ public class LevelLoader extends Parent {
                     getChildren().remove(w);
                 }
             }
-            if (ge.getIsDead() && !ge.getIsBoss()) {
+            if (ge.getIsDead() && !ge.getIsBoss() && !ge.getIsNeutral()) {
                 setEnemiesKilled(getEnemiesKilled() + 1);
             }
         }
@@ -580,22 +582,6 @@ public class LevelLoader extends Parent {
             p.getChildren().clear();
         }
     }
-    
-    private void overkillCheck() {
-//        if (loader.getKilledEntities().size() > 5) {
-//            loader.getKilledEntities().clear();
-//            Animations.overkill(loader.getGuiLayer());
-//        }
-//        if (lastTime == 0 || System.currentTimeMillis() - lastTime > OVERKILL_PERIOD) {
-//            System.out.println("op: " + (System.currentTimeMillis() - lastTime));
-//
-//        }
-//        if (System.currentTimeMillis() - lastTime > ONE_SEC && !loader.getGameEntities().isEmpty()) {
-//            loader.getOverkillEntities().remove(0);
-//            System.out.println("SIZE: " + loader.getOverkillEntities().size());
-//        }
-    }
-    
 
     /*
     GETTERS AND SETTERS

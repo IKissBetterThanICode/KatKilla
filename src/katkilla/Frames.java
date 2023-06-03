@@ -268,9 +268,9 @@ public class Frames extends Parent {
             System.exit(0);
         });
         
-        if(!isMusicPlaying) {
+        if(!getIsMusicPlaying()) {
             General.playMusic(MENU_MUSIC, 0);
-            isMusicPlaying = true;
+            setIsMusicPlaying(true);
         }
         return group;
     }
@@ -394,7 +394,9 @@ public class Frames extends Parent {
         });        
         toMenuButton.setOnAction((event) -> {
             General.stopMusic();
+            setIsMusicPlaying(false);
             loader.stopAndClearAll();
+            entities.setScore(0);
             KatKilla.clearAndDisplay(menuScreen());
         });
 
@@ -404,7 +406,7 @@ public class Frames extends Parent {
     public Group levelSummary() {
         loader.getGuiLayer().getChildren().clear();
         Group group = new Group();
-        
+
         //labels 
         Label levelFinishedLabel = new Label("LEVEL " +(loader.getLevelSelector() - 1)+ " COMPLETED!");
         levelFinishedLabel.setId("levelFinishedLabel");
@@ -413,11 +415,14 @@ public class Frames extends Parent {
                 
         Label scoreTextLabel = new Label("SCORE: ");
         Label scoreNumberLabel = new Label(String.valueOf(player.getScore()));
-//        Label enemiesKilledTextLabel = new Label("ENEMIES KILLED: ");
-//        Label enemiesKilledNumberLabel = new Label(String.valueOf(loader.getEnemiesKilled()));
-//        Label totalEnemiesTextLabel = new Label("TOTAL ENEMIES: ");
-//        Label totalEnemiesNumberLabel = new Label(String.valueOf(loader.getTotalEnemies()));
-        Label[] labels = {scoreTextLabel, scoreNumberLabel};
+        Label enemiesKilledTextLabel = new Label("ENEMIES KILLED: ");
+        Label enemiesKilledNumberLabel = new Label(String.valueOf(loader.getEnemiesKilled()));
+        Label totalEnemiesTextLabel = new Label("TOTAL ENEMIES: ");
+        Label totalEnemiesNumberLabel = new Label(String.valueOf(loader.getTotalEnemies()));
+        Label overkillLabel = new Label("DOG OVERKILL!!!");
+        Label[] labels = {scoreTextLabel, scoreNumberLabel,
+                          enemiesKilledTextLabel, enemiesKilledNumberLabel, 
+                          totalEnemiesTextLabel, totalEnemiesNumberLabel, overkillLabel};
         for(int i = 0; i < labels.length; i++) {
             labels[i].setId("levelSummaryLabel");
             labels[i].relocate(100, 30*i);
@@ -430,10 +435,11 @@ public class Frames extends Parent {
         GridPane gridPane = new GridPane();
         gridPane.add(scoreTextLabel, 0, 0);
         gridPane.add(scoreNumberLabel, 1, 0);
-//        gridPane.add(enemiesKilledTextLabel, 0, 1);
-//        gridPane.add(enemiesKilledNumberLabel, 1, 1);
-//        gridPane.add(totalEnemiesTextLabel, 0, 2);
-//        gridPane.add(totalEnemiesNumberLabel, 1, 2);
+        gridPane.add(enemiesKilledTextLabel, 0, 1);
+        gridPane.add(enemiesKilledNumberLabel, 1, 1);
+        gridPane.add(totalEnemiesTextLabel, 0, 2);
+        gridPane.add(totalEnemiesNumberLabel, 1, 2);
+        gridPane.add(overkillLabel, 0, 3);
         gridPane.getColumnConstraints().add(new ColumnConstraints(col1));
         gridPane.getColumnConstraints().add(new ColumnConstraints(col2));
         gridPane.relocate(APP_WIDTH - (col1 + col2), 250);
@@ -468,8 +474,21 @@ public class Frames extends Parent {
                 new KeyValue(scoreTextLabel.visibleProperty(), true));
         KeyFrame tl2kf3 = new KeyFrame(Duration.millis(1500),
                 new KeyValue(scoreNumberLabel.visibleProperty(), true));
+        KeyFrame tl2kf4 = new KeyFrame(Duration.millis(2000),
+                new KeyValue(enemiesKilledTextLabel.visibleProperty(), true));
+        KeyFrame tl2kf5 = new KeyFrame(Duration.millis(2500),
+                new KeyValue(enemiesKilledNumberLabel.visibleProperty(), true));
+        KeyFrame tl2kf6 = new KeyFrame(Duration.millis(3000),
+                new KeyValue(totalEnemiesTextLabel.visibleProperty(), true));
+        KeyFrame tl2kf7 = new KeyFrame(Duration.millis(3500),
+                new KeyValue(totalEnemiesNumberLabel.visibleProperty(), true));
+        if(loader.getEnemiesKilled() == loader.getTotalEnemies()) {
+            KeyFrame tl2kf8 = new KeyFrame(Duration.millis(4000),
+            new KeyValue(overkillLabel.visibleProperty(), true));
+            tl2.getKeyFrames().add(tl2kf8);
+        }        
                 
-        tl2.getKeyFrames().addAll(tl2kf1, tl2kf2, tl2kf3);
+        tl2.getKeyFrames().addAll(tl2kf1, tl2kf2, tl2kf3, tl2kf4, tl2kf5, tl2kf6, tl2kf7);
         loader.getTimelines().add(tl2);
         tl2.setOnFinished((event) -> {
             keyControl();
@@ -759,6 +778,16 @@ public class Frames extends Parent {
     public BooleanProperty getSector2EnabledProperty() {
         return sector2EnabledProperty;
     }
+
+    public boolean getIsMusicPlaying() {
+        return isMusicPlaying;
+    }
+
+    public void setIsMusicPlaying(boolean isMusicPlaying) {
+        this.isMusicPlaying = isMusicPlaying;
+    }
+    
+    
 
 
 }
